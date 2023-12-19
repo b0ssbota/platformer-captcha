@@ -1,0 +1,12 @@
+#player_standing{
+
+    width: 200px;
+}
+
+#ground{
+    position:absolute;
+    height: 100;
+    width: 1000px;
+    bottom: 0;
+    object-position: left 80%;
+}
