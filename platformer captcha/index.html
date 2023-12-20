@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/global.css">
-</head>
-<body>
-    <img src="./assets/imgs/player standing.png" alt="player_standing" id = player_standing>
-    <img src="./assets/imgs/ground.png" alt="ground" id = ground>
+    <link rel="stylesheet" href="./assets/css/global.css" />
+  </head>
+  <body>
+    <img
+      src="./assets/imgs/player standing.png"
+      alt="player_standing"
+      id="player_standing"
+    />
+    <img src="./assets/imgs/ground.png" alt="ground" id="ground" />
     <script>
-        const player_standing = document.getElementById("player_standing");
-        
-        document.addEventListener("keydown", event => {
-            if(event.keyCode === 32) {
-                console.log("test")
-                
+      (async () => {
+        function sleep(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+        const playerStanding = document.getElementById("player_standing");
+
+        let clientY = window.screen.availHeight / 4;
+
+        playerStanding.style.position = "absolute ";
+
+        playerStanding.style.bottom = `${clientY}px`;
+
+        document.addEventListener("keydown", async (event) => {
+          if (event.keyCode === 32) {
+            for (let i = 0; i < 100; i++) {
+              clientY += 5;
+              playerStanding.style.bottom = `${clientY}px`;
+              await sleep();
             }
-
-
-
-        })
+            for (let i = 0; i < 100; i++) {
+              clientY -= 5;
+              playerStanding.style.bottom = `${clientY}px`;
+              console.log("IM RIGHT HERE PLS SABE ME");
+              await sleep(10);
+            }
+          }
+        });
+      })();
     </script>
-</body>
+  </body>
 </html>
