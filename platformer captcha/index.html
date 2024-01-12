@@ -15,33 +15,71 @@
     <img src="./assets/imgs/ground.png" alt="ground" id="ground" />
     <script>
       (async () => {
-        function sleep(ms) {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        }
-        const playerStanding = document.getElementById("player_standing");
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
-        let clientY = window.screen.availHeight / 4;
+  const playerStanding = document.getElementById("player_standing");
 
-        playerStanding.style.position = "absolute ";
+  let clientY = window.screen.availHeight / 4;
+  let clientX = 0;
 
-        playerStanding.style.bottom = `${clientY}px`;
+  playerStanding.style.position = "absolute";
+  playerStanding.style.bottom = `${clientY}px`;
 
-        document.addEventListener("keydown", async (event) => {
-          if (event.keyCode === 32) {
-            for (let i = 0; i < 100; i++) {
-              clientY += 5;
-              playerStanding.style.bottom = `${clientY}px`;
-              await sleep();
-            }
-            for (let i = 0; i < 100; i++) {
-              clientY -= 5;
-              playerStanding.style.bottom = `${clientY}px`;
-              console.log("IM RIGHT HERE PLS SABE ME");
-              await sleep(10);
-            }
+  let isJumping = false;
+  let isMovingRight = false;
+
+  document.addEventListener("keydown", async (event) => {
+    if (event.keyCode == 32) {
+      if (!isJumping) {
+        isJumping = true;
+        playerStanding.src = "./assets/imgs/player jump.png";
+
+        for (let i = 0; i < 100; i++) {
+          clientY += 2;
+          playerStanding.style.bottom = `${clientY}px`;
+
+          if (isMovingRight) {
+            clientX += 1; // Adjust as needed
+            playerStanding.style.left = `${clientX}px`;
           }
-        });
-      })();
+
+          await sleep();
+        }
+
+        for (let i = 0; i < 50; i++) {
+          clientY -= 4;
+          playerStanding.style.bottom = `${clientY}px`;
+
+          if (isMovingRight) {
+            clientX += 1; // Adjust as needed
+            playerStanding.style.left = `${clientX}px`;
+          }
+
+          console.log("IM RIGHT HERE PLS SAVE ME");
+          await sleep(10);
+        }
+
+        isJumping = false;
+        playerStanding.src = "./assets/imgs/player standing.png";
+      }
+    } else if (event.keyCode == 68) {
+      isMovingRight = true;
+      clientX += 2; // Adjust as needed
+      playerStanding.style.left = `${clientX}px`;
+    } else if (event.keyCode == 65) {
+      clientX -= 5;
+      playerStanding.style.left = `${clientX}px`;
+    }
+  });
+
+  document.addEventListener("keyup", (event) => {
+    if (event.keyCode == 68) {
+      isMovingRight = false;
+    }
+  });
+})();
     </script>
   </body>
 </html>
