@@ -30,6 +30,33 @@
   let isJumping = false;
   let isMovingRight = false;
 
+  var images = [];
+  images[0] = [playerStanding.src = "./assets/imgs/playerRunning1.png"]
+  images[1] = [playerStanding.src = "./assets/imgs/playerRunning2.png"]
+  images[2] = [playerStanding.src = "./assets/imgs/playerRunning3.png"]
+  var index = 0;
+
+  function change() {
+  document.getElementById("player_standing").src = images[index];
+  if (index == 2) {
+    index = 0;
+  } else {
+    index++;
+  }
+
+  setTimeout(change, 500);
+}
+
+while (isMovingRight == true){
+
+  if (isMovingRight == false){
+    break
+  }
+  else{
+    change();
+  }
+}
+
   document.addEventListener("keydown", async (event) => {
     if (event.keyCode == 32) {
       if (!isJumping) {
@@ -76,7 +103,7 @@
 
   document.addEventListener("keyup", (event) => {
     if (event.keyCode == 68) {
-      isMovingRight = false;
+      
     }
   });
 })();
