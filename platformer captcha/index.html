@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="./assets/css/global.css" />
+
+
   </head>
   <body>
     <img
@@ -15,98 +17,82 @@
     <img src="./assets/imgs/ground.png" alt="ground" id="ground" />
     <script>
       (async () => {
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
+      	function sleep(ms) {
+      		return new Promise((resolve) => setTimeout(resolve, ms));
+      	}
 
-  const playerStanding = document.getElementById("player_standing");
+      	const playerStanding = document.getElementById("player_standing");
 
-  let clientY = window.screen.availHeight / 4;
-  let clientX = 0;
+      	let clientY = window.screen.availHeight / 4;
+      	let clientX = 0;
 
-  playerStanding.style.position = "absolute";
-  playerStanding.style.bottom = `${clientY}px`;
+      	playerStanding.style.position = "absolute";
+      	playerStanding.style.bottom = `${clientY}px`;
 
-  let isJumping = false;
-  let isMovingRight = false;
+      	let isJumping = false;
+      	let isMovingRight = false;
 
-  var images = [];
-  images[0] = [playerStanding.src = "./assets/imgs/playerRunning1.png"]
-  images[1] = [playerStanding.src = "./assets/imgs/playerRunning2.png"]
-  images[2] = [playerStanding.src = "./assets/imgs/playerRunning3.png"]
-  var index = 0;
+      	var index = 0;
 
-  function change() {
-  document.getElementById("player_standing").src = images[index];
-  if (index == 2) {
-    index = 0;
-  } else {
-    index++;
-  }
+      	function change() {
+      		index++;
+      		if (index == 2) {
+      			index = 0;
+      		}
+      		playerStanding.src = `./assets/imgs/playerRunning${index + 1}.png`
+      	}
 
-  setTimeout(change, 500);
-}
-
-while (isMovingRight == true){
-
-  if (isMovingRight == false){
-    break
-  }
-  else{
-    change();
-  }
-}
-
-  document.addEventListener("keydown", async (event) => {
-    if (event.keyCode == 32) {
-      if (!isJumping) {
-        isJumping = true;
-        playerStanding.src = "./assets/imgs/player jump.png";
-
-        for (let i = 0; i < 100; i++) {
-          clientY += 2;
-          playerStanding.style.bottom = `${clientY}px`;
-
-          if (isMovingRight) {
-            clientX += 1; // Adjust as needed
-            playerStanding.style.left = `${clientX}px`;
+        setInterval(() => {
+          if(isMovingRight && !isJumping){
+      		  change();
           }
+      	}, 200);
 
-          await sleep();
-        }
+      	setInterval(() => {
+      		if (isMovingRight) {
+      			clientX += 1; // Adjust as needed
+      			playerStanding.style.left = `${clientX}px`;
+      		}
+      	}, 2.5);
 
-        for (let i = 0; i < 50; i++) {
-          clientY -= 4;
-          playerStanding.style.bottom = `${clientY}px`;
 
-          if (isMovingRight) {
-            clientX += 1; // Adjust as needed
-            playerStanding.style.left = `${clientX}px`;
-          }
+      	document.addEventListener("keydown", async (event) => {
+      		if (event.keyCode == 32) {
+      			if (!isJumping) {
+      				isJumping = true;
+      				playerStanding.src = "./assets/imgs/player jump.png";
 
-          console.log("IM RIGHT HERE PLS SAVE ME");
-          await sleep(10);
-        }
+      				for (let i = 0; i < 100; i++) {
+      					clientY += 2;
+      					playerStanding.style.bottom = `${clientY}px`;
 
-        isJumping = false;
-        playerStanding.src = "./assets/imgs/player standing.png";
-      }
-    } else if (event.keyCode == 68) {
-      isMovingRight = true;
-      clientX += 2; // Adjust as needed
-      playerStanding.style.left = `${clientX}px`;
-    } else if (event.keyCode == 65) {
-      clientX -= 5;
-      playerStanding.style.left = `${clientX}px`;
-    }
-  });
+      					await sleep();
+      				}
 
-  document.addEventListener("keyup", (event) => {
-    if (event.keyCode == 68) {
-      
-    }
-  });
-})();
-    </script>
+      				for (let i = 0; i < 50; i++) {
+      					clientY -= 4;
+      					playerStanding.style.bottom = `${clientY}px`;
+
+      					await sleep(10);
+      				}
+
+      				isJumping = false;
+      				playerStanding.src = "./assets/imgs/player standing.png";
+      			}
+      		} else if (event.keyCode == 68) {
+      			isMovingRight = true;
+      		} else if (event.keyCode == 65) {
+      			clientX -= 5;
+      			playerStanding.style.left = `${clientX}px`;
+      		}
+      	});
+
+      	document.addEventListener("keyup", async (event) => {
+      		if (event.keyCode == 68) {
+      			isMovingRight = false;
+      		}
+      	});
+      })();
+      </script>
   </body>
 </html>
