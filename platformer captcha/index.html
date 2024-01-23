@@ -14,23 +14,45 @@
       alt="player_standing"
       id="player_standing"
     />
-    <img src="./assets/imgs/ground.png" alt="ground" id="ground" />
+    <img 
+	src="./assets/imgs/ground.png" 
+	alt="ground" 
+	id="ground" 
+	/>
+	<img
+	src="./assets/imgs/block.png"
+	alt="block"
+	id="block"
+	/>
     <script>
       (async () => {
+
+
       	function sleep(ms) {
       		return new Promise((resolve) => setTimeout(resolve, ms));
       	}
 
       	const playerStanding = document.getElementById("player_standing");
 
-      	let clientY = window.screen.availHeight / 4;
+      	let clientY = window.screen.availHeight / 12;
+
+		const ground = document.getElementById("ground");
+
+		const block = document.getElementById("block");
+
+
+		const blockRect = block.getBoundingClientRect();
+
       	let clientX = 0;
 
       	playerStanding.style.position = "absolute";
-      	playerStanding.style.bottom = `${clientY}px`;
+      	playerStanding.style.bottom = `${clientY - 2}px`;
 
       	let isJumping = false;
       	let isMovingRight = false;
+		let isMovingLeft = false;
+		let isStandingRight = true;
+		let isStandingLeft = true;
 
       	var index = 0;
 
@@ -50,8 +72,59 @@
 
       	setInterval(() => {
       		if (isMovingRight) {
-      			clientX += 1; // Adjust as needed
+				if(isJumping){
+      				clientX += 2;
+				}
+				else{
+					clientX += 1;
+				}
+				console.log(clientY < block.offsetHeight + ground.offsetHeight)
+
+				if(clientX > blockRect.left - 160 && clientX < blockRect.right - 160){
+					if(clientY < block.offsetHeight + ground.offsetHeight - 12){
+						clientX = blockRect.left - 160;					
+					}
+				}
+
       			playerStanding.style.left = `${clientX}px`;
+      		}
+      	}, 2.5);
+
+		  function change2() {
+      		index++;
+      		if (index == 2) {
+      			index = 0;
+      		}
+      		playerStanding.src = `./assets/imgs/playerRunningLeft${index + 1}.png`
+      	}
+
+        setInterval(() => {
+          if(isMovingLeft && !isJumping){
+      		  change2();
+          }
+      	}, 200);
+
+      	setInterval(() => {
+      		if (isMovingLeft) {
+				if(isJumping){
+      				clientX -= 2;
+				}
+				else{
+					clientX -= 1;
+				}
+      			playerStanding.style.left = `${clientX}px`;
+      		}
+      	}, 2.5);
+
+      	setInterval(() => {
+      		if (!isJumping && !isMovingRight && !isMovingLeft && !isStandingLeft && isStandingRight) {
+				playerStanding.src = `./assets/imgs/player standing.png`
+      		}
+      	}, 2.5);
+
+		setInterval(() => {
+      		if (!isJumping && !isMovingRight && !isMovingLeft && isStandingLeft && !isStandingRight) {
+				playerStanding.src = `./assets/imgs/playerStandingLeft.png`
       		}
       	}, 2.5);
 
@@ -60,7 +133,12 @@
       		if (event.keyCode == 32) {
       			if (!isJumping) {
       				isJumping = true;
+					if(isStandingRight){
       				playerStanding.src = "./assets/imgs/player jump.png";
+					}
+					else{
+						playerStanding.src = "./assets/imgs/playerJumpLeft.png";
+					}
 
       				for (let i = 0; i < 100; i++) {
       					clientY += 2;
@@ -71,28 +149,51 @@
 
       				for (let i = 0; i < 50; i++) {
       					clientY -= 4;
+						  if(clientY < ground.offsetHeight - 24){
+							clientY = ground.offsetaHeight - 24;
+						}          
+						if(clientY < block.offsetHeight + ground.offsetHeight - 12){
+							clientY = block.offsetHeight + ground.offsetHeight - 12;
+						}
+		        
       					playerStanding.style.bottom = `${clientY}px`;
 
       					await sleep(10);
       				}
 
       				isJumping = false;
-      				playerStanding.src = "./assets/imgs/player standing.png";
+
+
+					if(isStandingRight){
+						playerStanding.src = `./assets/imgs/player standing.png`
+					}
+					else{
+						playerStanding.src = `./assets/imgs/playerStandingLeft.png`
+					}
       			}
+
+				
       		} else if (event.keyCode == 68) {
       			isMovingRight = true;
+				isStandingRight = true;
+				isStandingLeft = false;
       		} else if (event.keyCode == 65) {
-      			clientX -= 5;
-      			playerStanding.style.left = `${clientX}px`;
+				isMovingRight = false;
+				isMovingLeft = true ;
+				isStandingLeft = true;
+				isStandingRight = false;
       		}
-      	});
+    	});
 
       	document.addEventListener("keyup", async (event) => {
       		if (event.keyCode == 68) {
       			isMovingRight = false;
       		}
+      		if (event.keyCode == 65) {
+      			isMovingLeft = false;
+      		}
       	});
-      })();
+    })();
       </script>
   </body>
 </html>
